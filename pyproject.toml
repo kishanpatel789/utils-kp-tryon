@@ -1,0 +1,17 @@
+[project]
+name = "utils-kp-tryon"
+version = "0.1.0"
+description = "Personal utilities for Tryon work"
+readme = "README.md"
+authors = [
+    { name = "Kishan Patel", email = "kpatel@tryonmed.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "polars>=1.42.1",
+    "snowflake-connector-python>=4.6.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.18,<0.10.0"]
+build-backend = "uv_build"
