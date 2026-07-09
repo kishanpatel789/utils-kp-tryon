@@ -15,7 +15,15 @@ class SnowflakeClient:
     def run_query(self, sql: str) -> pl.DataFrame:
         with self.connection.cursor() as cur:
             cur.execute(sql)
-            return pl.from_arrow(cur.fetch_arrow_all())
+            try:
+                result = cur.fetch_arrow_all()
+                return pl.from_arrow(result) if result is not None else pl.DataFrame()
+            except snowflake.connector.errors.NotSupportedError:
+                rows = cur.fetchall()
+                if not rows:
+                    return pl.DataFrame()
+                columns = [c[0] for c in cur.description]
+                return pl.DataFrame(rows, schema=columns, orient="row")
 
     def close(self):
         if self._connection is not None and not self._connection.is_closed():
