@@ -109,3 +109,10 @@ class SnowflakeExplorer:
         """
         params = {"database": p.database, "schema": p.schema, "table": p.table}
         return self._client.run_query(sql, params)
+
+    def sample(self, table_path: str, count: int = 10) -> pl.DataFrame:
+        TablePath.parse(table_path)
+        sql = f"""
+            select * from {table_path} sample ({count} rows)
+        """
+        return self._client.run_query(sql)
