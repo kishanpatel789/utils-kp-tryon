@@ -1,3 +1,3 @@
-from .core import SnowflakeClient
+from .core import SnowflakeClient, SnowflakeExplorer
 
-__all__ = ["SnowflakeClient"]
+__all__ = ["SnowflakeClient", "SnowflakeExplorer"]
