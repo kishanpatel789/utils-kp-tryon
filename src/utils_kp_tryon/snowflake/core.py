@@ -116,3 +116,39 @@ class SnowflakeExplorer:
             select * from {table_path} sample ({count} rows)
         """
         return self._client.run_query(sql)
+
+    def desc_table(self, table_path: str) -> None:
+        p = TablePath.parse(table_path)
+        sql = f"""
+            select
+                table_catalog,
+                table_schema,
+                table_name,
+                table_type,
+                created,
+                last_altered,
+                row_count
+            from {p.database}.information_schema.tables
+            where
+                table_catalog = %(database)s
+                and table_schema = %(schema)s
+                and table_name = %(table)s
+        """
+        params = {"database": p.database, "schema": p.schema, "table": p.table}
+
+        with self._client.connection.cursor() as cur:
+            cur.execute(sql, params)
+            result = cur.fetchone()
+
+        if result is None:
+            print(f"Cannot find table {table_path}")
+            return
+
+        print(f"{result[0].lower()}.{result[1].lower()}.{result[2].lower()}")
+        print(
+            f"Type:\t\t{result[3]}",
+            f"Created:\t{result[4]}",
+            f"Last altered:\t{result[5]}",
+            f"Row count:\t{result[6]:,}",
+            sep="\n",
+        )
