@@ -18,7 +18,7 @@ class SnowflakeClient:
         with self.connection.cursor() as cur:
             cur.execute(sql, params)
             try:
-                result = cur.fetch_arrow_all()
+                result = cur.fetch_arrow_all(force_microsecond_precision=True)
                 return pl.from_arrow(result) if result is not None else pl.DataFrame()
             except snowflake.connector.errors.NotSupportedError:
                 rows = cur.fetchall()
