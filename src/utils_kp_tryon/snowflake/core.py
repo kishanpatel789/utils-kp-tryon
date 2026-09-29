@@ -145,10 +145,8 @@ class SnowflakeExplorer:
             return
 
         print(f"{result[0].lower()}.{result[1].lower()}.{result[2].lower()}")
-        print(
-            f"Type:\t\t{result[3]}",
-            f"Created:\t{result[4]}",
-            f"Last altered:\t{result[5]}",
-            f"Row count:\t{result[6]:,}",
-            sep="\n",
-        )
+        print(f"Type:\t\t{result[3]}")
+        print(f"Created:\t{result[4]}")
+        print(f"Last altered:\t{result[5]}")
+        if result[3] == "BASE TABLE":
+            print(f"Row count:\t{result[6]:,}")
