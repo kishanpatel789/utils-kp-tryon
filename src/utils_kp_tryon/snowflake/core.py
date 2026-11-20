@@ -11,7 +11,10 @@ class SnowflakeClient:
     @property
     def connection(self) -> snowflake.connector.SnowflakeConnection:
         if self._connection is None or self._connection.is_closed():
-            self._connection = snowflake.connector.connect(connection_name="default")
+            self._connection = snowflake.connector.connect(
+                connection_name="default",
+                enable_server_session_keep_alive_auto_detection=True,
+            )
         return self._connection
 
     def run_query(self, sql: str, params: dict | tuple | None = None) -> pl.DataFrame:
